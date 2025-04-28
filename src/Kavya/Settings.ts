@@ -1,7 +1,7 @@
 import {
 	DUINavigationButton,
 	SourceStateManager,
-} from '@paperback/types';
+} from '@paperback/types/lib/compat/0.8';
 import {
 	DEFAULT_VALUES,
 	KavitaRequestInterceptor
