@@ -4,7 +4,7 @@ import {
 	RequestManager,
 	SearchRequest,
 	SourceStateManager
-} from '@paperback/types';
+} from '@paperback/types/lib/compat/0.8';
 import { CacheManager } from './CacheManager';
 import {
 	KavitaRequestInterceptor,

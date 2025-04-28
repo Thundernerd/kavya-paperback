@@ -7,7 +7,7 @@ import {
 	SourceStateManager,
 	Tag,
 	TagSection
-} from '@paperback/types';
+} from '@paperback/types/lib/compat/0.8';
 
 const KAVITA_PUBLICATION_STATUS: any = {
 	0: 'Ongoing',

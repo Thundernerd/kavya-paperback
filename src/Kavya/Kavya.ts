@@ -1,9 +1,7 @@
 import {
-	BadgeColor,
 	Chapter,
 	ChapterDetails,
 	ChapterProviding,
-	ContentRating,
 	DUIForm,
 	DUISection,
 	HomePageSectionsProviding,
@@ -16,13 +14,12 @@ import {
 	RequestManagerProviding,
 	SearchRequest,
 	SearchResultsProviding,
-	SourceInfo,
-	SourceIntents,
+	Source,
 	SourceManga,
 	Tag,
 	TagSection,
 	TrackerActionQueue
-} from '@paperback/types';
+} from '@paperback/types/lib/compat/0.8';
 import {
 	serverSettingsMenu
 } from './Settings';
@@ -42,25 +39,7 @@ const sortHelper = (a: any, b: any) => {
 	return a.volume === 0 || b.volume === 0 ? b.volume - a.volume : a.volume - b.volume;
 }
 
-export const KavyaInfo: SourceInfo = {
-	version: '1.3.6',
-	name: 'Kavya',
-	icon: 'icon.png',
-	author: 'ACK72',
-	authorWebsite: 'https://github.com/ACK72',
-	description: 'Kavita client extension for Paperback',
-	contentRating: ContentRating.EVERYONE,
-	websiteBaseURL: 'https://www.kavitareader.com/',
-	sourceTags: [
-		{
-			text: 'Kavita',
-			type: BadgeColor.GREEN,
-		},
-	],
-	intents: SourceIntents.COLLECTION_MANAGEMENT | SourceIntents.HOMEPAGE_SECTIONS | SourceIntents.MANGA_CHAPTERS | SourceIntents.MANGA_TRACKING | SourceIntents.SETTINGS_UI
-};
-
-export class Kavya implements ChapterProviding, HomePageSectionsProviding, MangaProgressProviding, MangaProviding, RequestManagerProviding, SearchResultsProviding {
+export class Kavya extends Source implements ChapterProviding, HomePageSectionsProviding, MangaProgressProviding, MangaProviding, RequestManagerProviding, SearchResultsProviding {
 	stateManager = App.createSourceStateManager();
 
 	cacheManager = new CacheManager();
@@ -72,7 +51,7 @@ export class Kavya implements ChapterProviding, HomePageSectionsProviding, Manga
 		interceptor: this.interceptor
 	});
 
-	async getSourceMenu(): Promise<DUISection> {
+	override async getSourceMenu(): Promise<DUISection> {
 		return App.createDUISection({
 			id: 'main',
 			header: 'Source Settings',
@@ -174,7 +153,7 @@ export class Kavya implements ChapterProviding, HomePageSectionsProviding, Manga
 		return await searchRequest(searchQuery, metadata, this.requestManager, this.interceptor, this.stateManager, this.cacheManager);
 	}
 
-	async getSearchTags(): Promise<TagSection[]> {
+	override async getSearchTags(): Promise<TagSection[]> {
 		// This function is also called when the user search in an other source. It should not throw if the server is unavailable.
 		if (!(await this.interceptor.isServerAvailable())) {
 			return [];
@@ -243,7 +222,7 @@ export class Kavya implements ChapterProviding, HomePageSectionsProviding, Manga
 		return tagNames.map((tag) => tagSections[tag]);
 	}
 
-	async getHomePageSections(
+	override async getHomePageSections(
 		sectionCallback: (section: HomeSection) => void
 	): Promise<void> {
 		// This function is called on the homepage and should not throw if the server is unavailable
@@ -385,7 +364,7 @@ export class Kavya implements ChapterProviding, HomePageSectionsProviding, Manga
 		await Promise.all(promises);
 	}
 
-	async getViewMoreItems(
+	override async getViewMoreItems(
 		homepageSectionId: string,
 		metadata: any
 	): Promise<PagedResults> {
